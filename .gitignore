@@ -1,0 +1,26 @@
+# secrets
+backend/.env
+
+# Python
+backend/.venv/
+__pycache__/
+*.pyc
+
+# Node
+frontend/node_modules/
+frontend/dist/
+
+# rebuilt by backend/ingest/build_db.py
+data/flame.db
+
+# full PSI detail records are large and re-downloadable (fetch_psi.py)
+data/raw/details/
+data/raw/psi_investigations_all.json
+
+# NASA documents are large and re-downloadable (fetch_docs.py); the vectors are rebuilt (build_embeddings.py)
+data/raw/docs/
+data/embeddings.npz
+
+# the official NASA resource pages and PDFs are re-downloadable (fetch_resources.py);
+# data/resources.json, the passages read from them, is kept
+data/raw/resources/

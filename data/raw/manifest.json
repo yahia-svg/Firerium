@@ -1,0 +1,276 @@
+[
+  {
+    "accession": "PSI-10",
+    "acronym": "ACME/Flame Design",
+    "title": "Advanced Combustion via Microgravity Experiments / Flame Design",
+    "tables": [
+      {
+        "file_name": "PSI-10_Experimental table_Flame Design_Normal Flame.csv",
+        "url": "https://psi.nasa.gov/geode-py/ws/studies/PSI-10/download?source=datamanager&file=PSI-10_Experimental%20table_Flame%20Design_Normal%20Flame.csv",
+        "bytes": 26933
+      },
+      {
+        "file_name": "PSI-10_Experimental table_Flame Design_Inverse Flame.csv",
+        "url": "https://psi.nasa.gov/geode-py/ws/studies/PSI-10/download?source=datamanager&file=PSI-10_Experimental%20table_Flame%20Design_Inverse%20Flame.csv",
+        "bytes": 17314
+      }
+    ]
+  },
+  {
+    "accession": "PSI-20",
+    "acronym": "ACME BRE",
+    "title": "Advanced Combustion via Microgravity Experiments - Burning Rate Emulator",
+    "tables": [
+      {
+        "file_name": "PSI-20_Experimental table_ACME BRE.csv",
+        "url": "https://psi.nasa.gov/geode-py/ws/studies/PSI-20/download?source=datamanager&file=PSI-20_Experimental%20table_ACME%20BRE.csv",
+        "bytes": 1113
+      }
+    ]
+  },
+  {
+    "accession": "PSI-21",
+    "acronym": "ACME CLD Flame",
+    "title": "Advanced Combustion via Microgravity Experiments / Coflow Laminar Diffusion Flame",
+    "tables": [
+      {
+        "file_name": "PSI-21_Experimental table_CLD Flame.csv",
+        "url": "https://psi.nasa.gov/geode-py/ws/studies/PSI-21/download?source=datamanager&file=PSI-21_Experimental%20table_CLD%20Flame.csv",
+        "bytes": 2454
+      }
+    ]
+  },
+  {
+    "accession": "PSI-22",
+    "acronym": "ACME E-FIELD Flames",
+    "title": "Advanced Combustion via Microgravity Experiments Electric-Field Effects on Laminar Diffusion Flames",
+    "tables": [
+      {
+        "file_name": "PSI-22_Experimental table_ACME E-FIELD Flames.csv",
+        "url": "https://psi.nasa.gov/geode-py/ws/studies/PSI-22/download?source=datamanager&file=PSI-22_Experimental%20table_ACME%20E-FIELD%20Flames.csv",
+        "bytes": 2475
+      }
+    ]
+  },
+  {
+    "accession": "PSI-23",
+    "acronym": "ACME s-Flame",
+    "title": "Advanced Combustion via Microgravity Experiments-Structure and Response of Spherical Diffusion Flames",
+    "tables": [
+      {
+        "file_name": "PSI-23_Experimental table_ACME s-Flame.csv",
+        "url": "https://psi.nasa.gov/geode-py/ws/studies/PSI-23/download?source=datamanager&file=PSI-23_Experimental%20table_ACME%20s-Flame.csv",
+        "bytes": 2456
+      }
+    ]
+  },
+  {
+    "accession": "PSI-25",
+    "acronym": "BASS-II",
+    "title": "Burning and Suppression of Solids - II",
+    "tables": [
+      {
+        "file_name": "PSI-25_Experimental table_BASS-II.csv",
+        "url": "https://psi.nasa.gov/geode-py/ws/studies/PSI-25/download?source=datamanager&file=PSI-25_Experimental%20table_BASS-II.csv",
+        "bytes": 16590
+      }
+    ]
+  },
+  {
+    "accession": "PSI-26",
+    "acronym": "BASS",
+    "title": "Burning and Suppression of Solids",
+    "tables": [
+      {
+        "file_name": "PSI-26_Experimental table_BASS.csv",
+        "url": "https://psi.nasa.gov/geode-py/ws/studies/PSI-26/download?source=datamanager&file=PSI-26_Experimental%20table_BASS.csv",
+        "bytes": 4726
+      }
+    ]
+  },
+  {
+    "accession": "PSI-39",
+    "acronym": "CFI",
+    "title": "Cool Flames Investigation",
+    "tables": [
+      {
+        "file_name": "PSI-39_Experimental table_CFI.csv",
+        "url": "https://psi.nasa.gov/geode-py/ws/studies/PSI-39/download?source=datamanager&file=PSI-39_Experimental%20table_CFI.csv",
+        "bytes": 7792
+      }
+    ]
+  },
+  {
+    "accession": "PSI-47",
+    "acronym": "DAFT / DAFT-2",
+    "title": "Dust and Aerosol Measurement Feasibility Test / Dust and Aerosol Measurement Feasibility Test-2",
+    "tables": [
+      {
+        "file_name": "PSI-47_Experimental table_DAFT.csv",
+        "url": "https://psi.nasa.gov/geode-py/ws/studies/PSI-47/download?source=datamanager&file=PSI-47_Experimental%20table_DAFT.csv",
+        "bytes": 518
+      }
+    ]
+  },
+  {
+    "accession": "PSI-60",
+    "acronym": "",
+    "title": "Computational and Experimental Analysis of SPICE Data Sets",
+    "tables": []
+  },
+  {
+    "accession": "PSI-62",
+    "acronym": "",
+    "title": "Concurrent Flame Spread Modeling using Flamelet Generated Manifolds in Microgravity with Comparison to BASS Experiments using Two-Color Tomography",
+    "tables": []
+  },
+  {
+    "accession": "PSI-68",
+    "acronym": "FLEX-2",
+    "title": "Flame Extinguishment Experiment - 2",
+    "tables": [
+      {
+        "file_name": "PSI-68_Experimental table_Flex2.csv",
+        "url": "https://psi.nasa.gov/geode-py/ws/studies/PSI-68/download?source=datamanager&file=PSI-68_Experimental%20table_Flex2.csv",
+        "bytes": 1029
+      }
+    ]
+  },
+  {
+    "accession": "PSI-69",
+    "acronym": "FLEX",
+    "title": "Flame Extinguishment Experiment",
+    "tables": [
+      {
+        "file_name": "PSI-69_Experimental table_FLEX.csv",
+        "url": "https://psi.nasa.gov/geode-py/ws/studies/PSI-69/download?source=datamanager&file=PSI-69_Experimental%20table_FLEX.csv",
+        "bytes": 24776
+      }
+    ]
+  },
+  {
+    "accession": "PSI-98",
+    "acronym": "SAFFIRE-I",
+    "title": "Spacecraft Fire Safety Experiment-I",
+    "tables": [
+      {
+        "file_name": "PSI-98_Experimental table_SAFFIRE-1.csv",
+        "url": "https://psi.nasa.gov/geode-py/ws/studies/PSI-98/download?source=datamanager&file=PSI-98_Experimental%20table_SAFFIRE-1.csv",
+        "bytes": 469
+      }
+    ]
+  },
+  {
+    "accession": "PSI-99",
+    "acronym": "SAFFIRE-II",
+    "title": "Spacecraft Fire Experiment-II",
+    "tables": [
+      {
+        "file_name": "PSI-99_Experimental table_SAFFIRE-2.csv",
+        "url": "https://psi.nasa.gov/geode-py/ws/studies/PSI-99/download?source=datamanager&file=PSI-99_Experimental%20table_SAFFIRE-2.csv",
+        "bytes": 1973
+      }
+    ]
+  },
+  {
+    "accession": "PSI-100",
+    "acronym": "SAFFIRE-III",
+    "title": "Spacecraft Fire Experiment-III",
+    "tables": [
+      {
+        "file_name": "PSI-100_Experimental table_SAFFIRE-3.csv",
+        "url": "https://psi.nasa.gov/geode-py/ws/studies/PSI-100/download?source=datamanager&file=PSI-100_Experimental%20table_SAFFIRE-3.csv",
+        "bytes": 239
+      }
+    ]
+  },
+  {
+    "accession": "PSI-101",
+    "acronym": "SAME-R",
+    "title": "Smoke Aerosol Measurement Experiment-Reflight",
+    "tables": [
+      {
+        "file_name": "PSI-101_Experimental table_SAME-R.csv",
+        "url": "https://psi.nasa.gov/geode-py/ws/studies/PSI-101/download?source=datamanager&file=PSI-101_Experimental%20table_SAME-R.csv",
+        "bytes": 5674
+      }
+    ]
+  },
+  {
+    "accession": "PSI-102",
+    "acronym": "SAME",
+    "title": "Smoke and Aerosol Measurement Experiment",
+    "tables": [
+      {
+        "file_name": "PSI-102_Experimental table_SAME.csv",
+        "url": "https://psi.nasa.gov/geode-py/ws/studies/PSI-102/download?source=datamanager&file=PSI-102_Experimental%20table_SAME.csv",
+        "bytes": 331
+      }
+    ]
+  },
+  {
+    "accession": "PSI-106",
+    "acronym": "SLICE",
+    "title": "Structure and Liftoff In Combustion Experiment",
+    "tables": [
+      {
+        "file_name": "PSI-106_Experimental table_Slice.csv",
+        "url": "https://psi.nasa.gov/geode-py/ws/studies/PSI-106/download?source=datamanager&file=PSI-106_Experimental%20table_Slice.csv",
+        "bytes": 734
+      }
+    ]
+  },
+  {
+    "accession": "PSI-107",
+    "acronym": "SPICE",
+    "title": "Smoke Point In Co-flow Experiment",
+    "tables": [
+      {
+        "file_name": "PSI-107_Experimental table_Spice.csv",
+        "url": "https://psi.nasa.gov/geode-py/ws/studies/PSI-107/download?source=datamanager&file=PSI-107_Experimental%20table_Spice.csv",
+        "bytes": 31205
+      }
+    ]
+  },
+  {
+    "accession": "PSI-115",
+    "acronym": "",
+    "title": "Utilization of the Smoke Aerosol Measurement Experiment Data for Advanced Modeling and Simulation of Smoke Generation in Micro-Gravity",
+    "tables": []
+  },
+  {
+    "accession": "PSI-117",
+    "acronym": "",
+    "title": "Effect of External Thermo-Convective Perturbation on Cool Flame Dynamics: A Multidimensional Multi-Physics CFD Analysis",
+    "tables": []
+  },
+  {
+    "accession": "PSI-142",
+    "acronym": "",
+    "title": "Quantitative Studies of Cool Flame Transitions at Radiation / Stretch Extinction Using Counterflow Flames",
+    "tables": [
+      {
+        "file_name": "PSI-142_Experimental table_Data Summary Table.csv",
+        "url": "https://psi.nasa.gov/geode-py/ws/studies/PSI-142/download?source=datamanager&file=PSI-142_Experimental%20table_Data%20Summary%20Table.csv",
+        "bytes": 727
+      }
+    ]
+  },
+  {
+    "accession": "PSI-159",
+    "acronym": "ACME CFI-G",
+    "title": "Advanced Combustion via Microgravity Experiments / Cool Flames Investigation with Gases",
+    "tables": [
+      {
+        "file_name": "PSI-159_Experimental table_CFI-G_Normal Flames.csv",
+        "url": "https://psi.nasa.gov/geode-py/ws/studies/PSI-159/download?source=datamanager&file=PSI-159_Experimental%20table_CFI-G_Normal%20Flames.csv",
+        "bytes": 22166
+      },
+      {
+        "file_name": "PSI-159_Experimental table_CFI-G_Inverse Flames.csv",
+        "url": "https://psi.nasa.gov/geode-py/ws/studies/PSI-159/download?source=datamanager&file=PSI-159_Experimental%20table_CFI-G_Inverse%20Flames.csv",
+        "bytes": 39422
+      }
+    ]
+  }
+]
