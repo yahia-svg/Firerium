@@ -118,7 +118,9 @@ is about such a gap, set grounding to "not_in_collection".
   2. Anything else: NASA may well have it, but it is not among the passages you were given. Do not mention that \
 it is missing, unavailable, not in the sources, not in the documents or not in this collection, and do not \
 apologise. Answer fully from what you do have, leave the unsupported part out, and offer a follow-up question \
-instead. Never describe the limits of this site, its search, its library or its documents.
+instead. Never describe the limits of this site, its search, its library or its documents. Never write about \
+the passages themselves: no "the passages I have", "the provided sources", "the documents I was given", "the \
+excerpts do not say", "I do not have". Start with what NASA found, tested or designed.
   A short, well-cited answer is better than a padded one.
 - You may explain a general scientific term (for example buoyancy, limiting oxygen index, diffusion flame) from \
 general knowledge, but only after checking that SOURCES does not already explain it; if a NASA passage does, use \
@@ -241,6 +243,30 @@ def _ref_from_index(sid: str) -> dict:
 
 _TAG = r"(?:S\d+|PSI-\d+|RES-\d+|CHALLENGE)"
 _GROUP = re.compile(rf"\[\s*({_TAG}(?:\s*[,;]\s*{_TAG})*)\s*\]")
+
+
+# Sentences about the assistant's own sources ("the passages I have do not say...") describe a limit of this
+# site, not of NASA's research, so they are removed even if the model writes one. A gap in NASA's own work is
+# worded about NASA ("none of NASA's investigations tested...") and is kept.
+_SELF_LIMIT = re.compile(
+    r"\b(passages?|sources?|excerpts?|documents?|materials?)\s+(that\s+)?(I|we)\s+(have|had|was given|were given|received|can see)\b"
+    r"|\b(the|these|those|my)\s+(provided\s+|available\s+|given\s+|retrieved\s+)?(passages?|sources?|excerpts?)\b"
+    r"[^.!?]*\b(do(es)?\s+not|do(es)?n[’']t|did\s+not|lack|never)\b"
+    r"|\bnot\s+(in|among|within|covered\s+by|found\s+in)\s+(the|these|my)\s+(provided\s+)?(passages?|sources?|excerpts?)\b"
+    r"|\bI\s+(do\s+not|don[’']t)\s+have\b",
+    re.I)
+
+
+def drop_self_limits(text: str) -> str:
+    out_lines = []
+    for line in text.split("\n"):
+        parts = re.split(r"(?<=[.!?])\s+(?=[A-Z\[*(])", line)
+        kept = [p for p in parts if not _SELF_LIMIT.search(p)]
+        if parts and not kept and line.strip():
+            continue  # the whole line was about the sources
+        out_lines.append(" ".join(kept))
+    cleaned = re.sub(r"\n{3,}", "\n\n", "\n".join(out_lines)).strip()
+    return cleaned or text  # never return an empty answer
 
 
 def _number_refs(answer: str, passages: dict[str, dict]) -> tuple[str, list[dict], list[str]]:
@@ -487,7 +513,7 @@ def ask(question: str, history: list[dict] | None = None, context: dict | None =
         out["notice"] = f"{exc} Showing a retrieval-only answer instead."
         return out
 
-    answer, refs, removed = _number_refs(data["answer"].strip(), passages)
+    answer, refs, removed = _number_refs(drop_self_limits(data["answer"].strip()), passages)
     ledger, checks = build_ledger(answer, refs)
     checks["removed_citations"] = len(removed)
     valid = {r["id"] for r in refs} | {p["investigation_id"] for p in found} | set(store.INVS)

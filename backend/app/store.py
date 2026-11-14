@@ -163,17 +163,30 @@ FILTER_KEYS = ("q", "fuel_state", "material", "pillar", "gravity", "facility", "
                "o2_min", "o2_max", "p_min", "p_max", "flow_min", "flow_max", "has_runs")
 
 
+_SUFFIXES = ("ations", "ation", "ions", "ion", "ors", "or", "ings", "ing", "ers", "er", "es", "ed", "s")
+
+
+def _stem(tok: str) -> str:
+    """A light word stem, so "detection" also finds "detector" and "suppression" finds "suppressant"."""
+    for suf in _SUFFIXES:
+        if tok.endswith(suf) and len(tok) - len(suf) >= 4:
+            return tok[: -len(suf)]
+    return tok
+
+
 def apply_filters(f: dict) -> list[dict]:
     out = []
     q = (f.get("q") or "").strip().lower()
+    stems = [_stem(tok) for tok in q.split()]
     for inv in INVS.values():
         if q:
             hay = " ".join([
                 inv["id"], inv["short"], inv["name"], inv["title"], inv["summary"], inv.get("sub_area") or "",
                 " ".join(inv["keywords"]), " ".join(inv["materials"]), " ".join(inv["topics"]),
+                " ".join(inv["pillars"]),  # prevention / detection / suppression
                 inv["text"]["objective"], inv.get("pi") or "",
             ]).lower()
-            if not all(tok in hay for tok in q.split()):
+            if not all(s in hay for s in stems):
                 continue
         if f.get("fuel_state") and not any(fs.startswith(f["fuel_state"]) for fs in inv["fuel_state"]):
             continue

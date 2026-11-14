@@ -49,6 +49,13 @@ with TestClient(app) as c:
     r = c.post("/api/investigations/search", json={"q": "smoke"}).json()
     print("      q=smoke:", [x["short"] for x in r["results"]])
     ok({"PSI-101", "PSI-102"} <= {x["id"] for x in r["results"]}, "text search finds SAME and SAME-R")
+    r = c.post("/api/investigations/search", json={"q": "smoke detection"}).json()
+    ok({"PSI-101", "PSI-102"} <= {x["id"] for x in r["results"]},
+       "a two-word search matches word forms ('detection' finds 'detector') and safety areas")
+    from app.research import drop_self_limits  # noqa: E402
+    ok(drop_self_limits("The passages I have do not report CO2 results. FLEX tested CO2 [S1].") == "FLEX tested CO2 [S1]."
+       and "research gap" in drop_self_limits("This is a research gap: no PSI investigation tested it [S1]."),
+       "assistant: sentences about its own sources are removed, NASA research gaps are kept")
     r = c.post("/api/investigations/search", json={"fuel_state": "solid", "o2_min": 30}).json()
     ok(r["count"] == 0, "no solid-material investigation reports O2 >= 30% (a real gap)")
 

@@ -125,6 +125,12 @@ def need_env(env_id: str) -> None:
         raise HTTPException(404, f"Unknown environment '{env_id}'.")
 
 
+@app.get("/api/health", include_in_schema=False)
+def health():
+    """For Render's health check and uptime monitors: cheap, no AI call, no large payload."""
+    return {"ok": True, "investigations": len(store.INVS), "ai": llm.available()}
+
+
 @app.get("/api/meta")
 def meta():
     return {

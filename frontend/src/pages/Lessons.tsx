@@ -25,6 +25,31 @@ const QUIZ2_KEY = 'fif.quiz2.best'
 
 const YEAR = (when: string) => when.match(/\d{4}/)?.[0] ?? when
 
+// Fire tests that can be run on the ground: a few seconds of free fall in a drop tower, and
+// Moon or Mars gravity, the conditions with almost no data in PSI.
+const DROP_TOWERS = [
+  {
+    where: 'NASA Glenn, Cleveland, USA',
+    name: 'Reduced Gravity Drop Towers and Test Rigs',
+    url: 'https://www.nasa.gov/glenn/glenn-expertise-space-exploration/physical-sciences-program/reduced-gravity-drop-towers-and-test-rigs/',
+    facts: [
+      '5.18 s of free fall in the Zero Gravity Research Facility, 2.2 s in the smaller tower',
+      'A combustion rig for flame and extinction tests',
+      'A spinning chamber inside the falling package gives partial gravity',
+    ],
+  },
+  {
+    where: 'ZARM, University of Bremen, Germany',
+    name: 'Bremen Drop Tower and GraviTower Bremen',
+    url: 'https://www.zarm.uni-bremen.de/en/research/labs-and-test-facilities',
+    facts: [
+      '4.7 s of free fall, or 9.3 s when the capsule is shot up first',
+      'The GraviTower controls the fall to give Moon or Mars gravity',
+      'Up to 20 runs an hour, far more than flights to orbit',
+    ],
+  },
+]
+
 export default function Lessons() {
   const { data, error, loading } = useLoad(() => api.insights(), [])
   const { data: all } = useLoad(() => api.search({}), [])
@@ -43,7 +68,7 @@ export default function Lessons() {
     }
   }
   usePageContext('Lessons & Applications', ['PSI-98', 'PSI-25', 'PSI-102', 'PSI-69'],
-    'Sections on this page: lessons from the Apollo 1, Apollo 13 and Mir accidents (NASA history pages); Earth vs. microgravity (candle example, Saffire-II same-sample comparison); research that informs next-generation fire safety equipment; uses on Earth (NASA Spinoff articles).')
+    'Sections on this page: lessons from the Apollo 1, Apollo 13 and Mir accidents (NASA history pages); Earth vs. microgravity (candle example, Saffire-II same-sample comparison); research that informs next-generation fire safety equipment; uses on Earth (NASA Spinoff articles), and testing fire on Earth in drop towers (NASA Glenn: 5.18 s and 2.2 s of free fall, a combustion rig, a centrifuge for partial gravity; ZARM Bremen: 4.7 s, 9.3 s with the catapult, GraviTower for Moon or Mars gravity).')
 
   useEffect(() => {
     if (data && loc.hash) document.getElementById(loc.hash.slice(1))?.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -217,6 +242,27 @@ export default function Lessons() {
                   <InsightBlock c={c} />
                 </div>
               ))}
+            </div>
+            <div className="panel stack-sm">
+              <h3>Testing fire on Earth: drop towers</h3>
+              <p className="small muted">
+                A falling package is weightless for a few seconds, enough to light a flame and watch it, and it costs
+                far less than a test in orbit. The PSI records for BASS and ACME/Flame Design mention drop-tower
+                tests. Some towers can also give Moon or Mars gravity,
+                {reports.partial === 0 ? ' which none' : ` which only ${reports.partial}`} of the {n} investigations
+                here ran in.
+              </p>
+              <div className="grid c2">
+                {DROP_TOWERS.map((t) => (
+                  <a key={t.url} className="panel feature" href={t.url} target="_blank" rel="noreferrer">
+                    <span className="tiny muted">{t.where}</span>
+                    <h3 style={{ marginTop: 2 }}>{t.name} ↗</h3>
+                    <ul className="small" style={{ margin: 0, paddingLeft: 18 }}>
+                      {t.facts.map((f) => <li key={f}>{f}</li>)}
+                    </ul>
+                  </a>
+                ))}
+              </div>
             </div>
           </section>
 
