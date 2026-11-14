@@ -119,12 +119,12 @@ export const FEATURES: Feature[] = [
 export const COMING: string[] = []
 
 export type Step = { text: string; to: string }
-export type Path = { id: string; who: string; title: string; steps: Step[] }
+export type Path = { id: string; level: 1 | 2 | 3 | 4; levelName: string; who: string; title: string; steps: Step[] }
 
-/** One plan per reader the site is built for. */
+/** One plan per reader the site is built for, from first contact with the topic (level 1) to expert use (level 4). */
 export const PATHS: Path[] = [
   {
-    id: 'undergrad', who: 'Undergraduate students', title: 'Understand the basics, then test yourself',
+    id: 'undergrad', level: 1, levelName: 'Beginner', who: 'Undergraduate students', title: 'Understand the basics, then test yourself',
     steps: [
       { text: 'Watch NASA’s 3-minute video on why it studies fire in space', to: '/resources#RES-3' },
       { text: 'Read why flames behave differently without gravity', to: '/lessons#gravity' },
@@ -134,7 +134,7 @@ export const PATHS: Path[] = [
     ],
   },
   {
-    id: 'grad', who: 'Graduate students & researchers', title: 'Find, compare and cite the evidence',
+    id: 'grad', level: 2, levelName: 'Intermediate', who: 'Graduate students & researchers', title: 'Find, compare and cite the evidence',
     steps: [
       { text: 'Filter experiments by material, fuel, oxygen level or topic', to: '/explorer' },
       { text: 'Ask for a findings brief, cited to NASA reports by page', to: '/assistant' },
@@ -144,7 +144,7 @@ export const PATHS: Path[] = [
     ],
   },
   {
-    id: 'engineer', who: 'Aerospace engineers', title: 'Start from the habitat',
+    id: 'engineer', level: 3, levelName: 'Advanced', who: 'Aerospace engineers', title: 'Start from the habitat',
     steps: [
       { text: 'Choose your habitat and read its fire-safety briefing', to: '/explorer?env=moon' },
       { text: 'Score the experiments for that habitat', to: '/ranking?env=moon' },
@@ -154,7 +154,7 @@ export const PATHS: Path[] = [
     ],
   },
   {
-    id: 'professor', who: 'Professors', title: 'Teach with real NASA data',
+    id: 'professor', level: 4, levelName: 'Expert', who: 'Professors', title: 'Teach with real NASA data',
     steps: [
       { text: 'Use the Apollo 1, Apollo 13 and Mir timeline as a case study', to: '/lessons#lessons' },
       { text: 'Set the insights quiz as a check after a lecture', to: '/insights?quiz=1' },

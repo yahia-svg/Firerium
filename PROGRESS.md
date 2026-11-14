@@ -521,6 +521,40 @@ updated for the new behaviour; AI disabled, no credit spent); pages screenshotte
   check) at the end; if streaming fails the client falls back to `/api/assistant/ask`. Checked end-to-end
   with a stand-in model: first text at 0.09 s. (2) Fewer passages: 6 per question, 8 for findings/compare
   tasks (was 10/12). Not yet measured with the live model.
+- **Researcher-first pass (2026-11-14).** Research Gaps opens with a bubble gap map (bubble area grows with
+  the number of experiments, a dashed red ring is a gap, `?` is not reported; any two groupings), then
+  short gap cards (tables and NASA text folded), habitat coverage, and open questions; the Earth-vs-
+  microgravity section (duplicate of Lessons) and the explainer banner are gone, the per-group lists are
+  folded. Mission Report: accident histories removed from preview, PDF and references (`mission.py`
+  returns `lessons: []`), boxed disclaimer reduced to one line, briefing bullets that repeat the ranking
+  hidden. Compare: four suggested pairs always visible. NASA Resources: a coverage matrix (passages read,
+  and which parts of the site each resource feeds) above compact two-column cards. The passages column is
+  a share of all text read (percent, sums to 100%), not a count.
+- **AI assistant page as a chat (2026-11-14).** Full-height chat: a centred welcome with two starter
+  cards, user turns as right-hand bubbles, answers beside the logo, and a composer pinned to the bottom.
+  Under the text box, an attached tray holds the five tasks (Ask, Findings brief, Compare, Design review,
+  Explain a term), the search scope (source kinds, experiments, the document list) and the
+  Researcher/Student wording. Task inputs (experiment, habitat, experiments to compare) appear inside the
+  composer; the text box is the question, focus, topic or term. Export PDF and New chat sit top right once
+  a chat has started. The facts box and the separate library section are gone (the library is in the
+  scope tray). Classes use the `ac-` prefix so they do not clash with the side panel's `ai-` classes.
+  Follow-up: sending a question scrolls it to the top and the answer writes below it (the page never
+  jumps to the bottom; the latest turn keeps a screen of room, and a ↓ button appears when more is
+  below). The writing is paced on a 16 ms timer (a few characters per tick, faster when more is waiting),
+  also for answers that arrive all at once; it is instant for reduced motion or a hidden tab. The checked
+  answer replaces the writing once it has caught up. The text box is one rounded card (question, then
+  scope and wording on the left, Enter hint and send on the right), with the five features as a tab strip
+  attached underneath; the scope opens as a pop-up above the text box.
+  Simplified: the text box is now one row (options icon, question, send). Wording (Researcher/Student)
+  moved into the options pop-up with the search scope; a dot on the icon shows when either is changed.
+  The keyboard hint and the disclaimer line under the box are gone; placeholders are short.
+- **Sections ordered by the challenge (2026-11-14).** `guide.ts` drives the sidebar, Start page and guide
+  drawer. Order: Summarise, rank & interpret (AI assistant, Ranking, Explorer, Fire Safety Insights);
+  Model & compare (Predictions, Compare, Charts, Research Gaps); Report & context (Mission Report,
+  Lessons & Applications, NASA Resources). Reasoning: the brief asks for an SI dashboard that
+  summarises, ranks and interprets; its objectives are habitat relevance (ranking), data for predictive
+  modelling (predictions, charts) and next-generation fire safety (insights, gaps); Earth applications
+  and history are optional context. The breadcrumb reads the group label from `GROUPS`.
 - The chart builder now starts from the curated preset for a table when one exists (FLEX opens on
   burning rate against oxygen, not pressure).
 

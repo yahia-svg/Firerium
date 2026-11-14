@@ -30,7 +30,10 @@ const STATUS: Record<LedgerRow['status'], { mark: string; cls: string; label: st
 /** The answer while the model is still writing it. Source tags ([S3]) are hidden until the checked
     answer arrives with its numbered references. */
 export function Writing({ text }: { text: string }) {
-  const clean = text.replace(/\s?\[S\d+(?:\s*,\s*S\d+)*\]/g, '').replace(/\s?\[PSI-\d+\]/g, '')
+  const clean = text
+    .replace(/\s?\[S\d+(?:\s*,\s*S\d+)*\]/g, '')
+    .replace(/\s?\[PSI-\d+\]/g, '')
+    .replace(/\s?\[#\d+(?:\s*,\s*#?\d+)*\]/g, '')
   return (
     <div className="writing" aria-live="polite">
       <Markdown text={clean} />

@@ -212,7 +212,7 @@ export default function Shell({ children }: { children: ReactNode }) {
           <span className="crumb grow">
             {here ? (
               <>
-                {here.group === 'discover' ? 'Discover' : here.group === 'analyse' ? 'Analyse' : 'Report & sources'} / <b>{here.name}</b>
+                {GROUPS.find((g) => g.id === here.group)?.label} / <b>{here.name}</b>
               </>
             ) : (
               <b>Start here</b>

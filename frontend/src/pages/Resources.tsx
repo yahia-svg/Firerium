@@ -6,8 +6,8 @@ import { useLoad, usePageContext } from '../ctx'
 
 const GROUPS: { topic: NasaResource['topic']; title: string; what: string }[] = [
   { topic: 'data', title: 'The data', what: 'The repository every experiment, chart and count on this site comes from.' },
-  { topic: 'science', title: 'The science, explained by NASA', what: 'NASA’s own overviews of the combustion research: a web page with experiment fact sheets, a short video and a 56-page review.' },
-  { topic: 'lessons', title: 'Lessons from past accidents', what: 'Three real events and what NASA changed afterwards. They are history, not experiments.' },
+  { topic: 'science', title: 'The science, by NASA', what: 'NASA’s own overviews of the combustion research: a web page with experiment fact sheets, a short video and a 56-page review.' },
+  { topic: 'lessons', title: 'Past accidents', what: 'Three real events and what NASA changed afterwards. They are history, not experiments.' },
   { topic: 'earth', title: 'From space to Earth', what: 'NASA Spinoff articles on fire-safety technology that reached firefighters and industry.' },
 ]
 
@@ -58,114 +58,118 @@ function Video({ r }: { r: NasaResource }) {
   )
 }
 
-function ResourceCard({ r, n }: { r: NasaResource; n: number }) {
+// Where on the site each resource is used: one column per part of the site.
+const USES: { key: string; label: string; test: (r: NasaResource) => boolean }[] = [
+  { key: 'ai', label: 'AI assistant', test: (r) => r.passages > 0 || !!r.psi }, // PSI is the assistant's main library
+  { key: 'data', label: 'Data pages', test: (r) => r.used_in.some((u) => /^\/(explorer|charts|whatif)/.test(u.to)) },
+  { key: 'profiles', label: 'Experiment pages', test: (r) => r.experiments.length > 0 || !!r.psi }, // every profile is a PSI record
+  { key: 'insights', label: 'Insights', test: (r) => r.used_in.some((u) => u.to.startsWith('/insights')) },
+  { key: 'lessons', label: 'Lessons', test: (r) => r.used_in.some((u) => u.to.startsWith('/lessons')) },
+  { key: 'gaps', label: 'Research Gaps', test: (r) => r.used_in.some((u) => u.to.startsWith('/gaps')) },
+]
+const TOPIC: Record<NasaResource['topic'], string> = { data: 'Data', science: 'Science', lessons: 'History', earth: 'Spinoff' }
+
+function UseMatrix({ list }: { list: NasaResource[] }) {
+  // each resource's share of all the passages the site read, so the column sums to 100%
+  const total = Math.max(1, list.filter((r) => !r.psi).reduce((s, r) => s + r.passages, 0))
+  const share = (n: number) => (n / total) * 100
+  const pct = (n: number) => {
+    const p = share(n)
+    return p > 0 && p < 1 ? '<1%' : `${Math.round(p)}%`
+  }
+  const go = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    history.replaceState(null, '', `#${id}`)
+  }
   return (
-    <article id={r.id} className="panel stack-sm resource" style={{ scrollMarginTop: 70 }}>
-      <div className="between" style={{ alignItems: 'flex-start' }}>
-        <div className="grow">
-          <div className="pills" style={{ marginBottom: 6 }}>
-            <span className="pill accent">Resource {n} of 10</span>
-            <span className="pill">{r.kind_name}</span>
-            {r.passages > 0 && <span className="pill good">{r.passages} {r.passages === 1 ? 'passage' : 'passages'} read</span>}
-          </div>
-          <h3>
-            <a href={r.url} target="_blank" rel="noreferrer">
-              {r.title} ↗
-            </a>
+    <article className="panel tight">
+      <div className="scroll-x">
+        <table className="umatrix">
+          <thead>
+            <tr>
+              <th className="lft">Resource</th>
+              <th className="lft">Share of text read</th>
+              {USES.map((u) => <th key={u.key}>{u.label}</th>)}
+            </tr>
+          </thead>
+          <tbody>
+            {list.map((r) => (
+              <tr key={r.id} onClick={() => go(r.id)} title="Go to this resource">
+                <td className="lft">
+                  <b className="small">{r.short}</b>
+                  <span className="tiny faint"> · {TOPIC[r.topic]}</span>
+                </td>
+                <td className="lft">
+                  {r.psi ? (
+                    <span className="tiny muted">the database: {r.psi.investigations} experiments</span>
+                  ) : (
+                    <span className="ubar">
+                      <b><i style={{ width: `${share(r.passages)}%` }} /></b>
+                      <em>{pct(r.passages)}</em>
+                    </span>
+                  )}
+                </td>
+                {USES.map((u) => (
+                  <td key={u.key} aria-label={u.test(r) ? `used in ${u.label}` : `not used in ${u.label}`}>
+                    <span className={`udot ${u.test(r) ? 'on' : ''}`} />
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </article>
+  )
+}
+
+function ResourceCard({ r }: { r: NasaResource }) {
+  return (
+    <article id={r.id} className="panel tight stack-sm resource" style={{ scrollMarginTop: 80 }}>
+      <div className="between" style={{ alignItems: 'flex-start', flexWrap: 'nowrap' }}>
+        <div>
+          <span className="tiny muted">{TOPIC[r.topic]} · {r.kind_name}</span>
+          <h3 style={{ marginTop: 2 }}>
+            <a href={r.url} target="_blank" rel="noreferrer">{r.title} ↗</a>
           </h3>
         </div>
+        {r.ask.length > 0 && <Explain q={r.ask[0]} label="Ask AI" />}
       </div>
-
-      <blockquote className="quote">
-        {r.description}
-        <footer>NASA’s description, from the official resource list for the challenge</footer>
-      </blockquote>
-
-      <div>
-        <h4>How this site uses it</h4>
-        <p className="small" style={{ margin: '4px 0 0' }}>{r.use}</p>
-      </div>
-
-      {r.psi && (
-        <div className="lib">
-          <div><span>Combustion investigations, every one in PSI</span><b>{r.psi.investigations}</b></div>
-          <div><span>Experimental run tables</span><b>{r.psi.tables}</b></div>
-          <div><span>Individual test rows</span><b>{r.psi.runs.toLocaleString()}</b></div>
-          <div><span>PSI reports and science documents read page by page</span><b>{r.psi.documents}</b></div>
-          <div className="total"><span>Passages from those documents</span><b>{r.psi.document_passages.toLocaleString()}</b></div>
-        </div>
-      )}
-
+      <p className="small" style={{ color: 'var(--text-2)' }}>{r.description}</p>
       <Video r={r} />
-
       {r.used_in.length > 0 && (
-        <div className="stack-sm">
-          <h4>Where you can see it on the site</h4>
-          <div className="chips">
-            {r.used_in.map((u) => (
-              <Link key={u.label} className="chip" to={u.to}>
-                {u.label} →
-              </Link>
-            ))}
-          </div>
+        <div className="chips">
+          {r.used_in.slice(0, 4).map((u) => (
+            <Link key={u.label} className="chip" to={u.to}>{u.label} →</Link>
+          ))}
         </div>
       )}
-
-      {r.highlights.length > 0 && (
+      {(r.highlights.length > 0 || r.documents.length > 0 || r.experiments.length > 0) && (
         <details className="src">
           <summary>
-            <span className="small">NASA’s words that the site quotes from it ({r.highlights.length})</span>
+            <span className="small">Quotes, documents and experiments named</span>
+            <span className="tiny faint">▾</span>
           </summary>
           <div className="body">
-            {r.highlights.map((h, i) => (
-              <Quote key={i} e={h} />
-            ))}
-          </div>
-        </details>
-      )}
-
-      {r.documents.length > 0 && (
-        <details className="src">
-          <summary>
-            <span className="small">
-              What was read: {r.documents.length} {r.documents.length === 1 ? 'document' : 'documents'}, {r.words.toLocaleString()} words
-            </span>
-          </summary>
-          <div className="body">
+            <p className="small"><b>How the site uses it: </b>{r.use}</p>
+            {r.experiments.length > 0 && (
+              <div className="row small" style={{ gap: 4 }}>
+                Names:
+                {r.experiments.slice(0, 12).map((e) => (
+                  <Link key={e.id} className="cite" to={`/explorer/${e.id}`}>{e.short}</Link>
+                ))}
+              </div>
+            )}
+            {r.highlights.map((h, i) => <Quote key={i} e={h} />)}
             {r.documents.map((d) => (
-              <div key={d.n}>
-                <a href={d.url} target="_blank" rel="noreferrer">
-                  {d.title} ↗
-                </a>
-                <span className="faint">
-                  {' '}
-                  · {DOC_TYPE[d.type]}
-                  {d.pages ? `, ${d.pages} pages` : ''} · {d.passages} passages · downloaded {d.fetched}
-                </span>
+              <div key={d.n} className="tiny">
+                <a href={d.url} target="_blank" rel="noreferrer">{d.title} ↗</a>
+                <span className="faint"> · {DOC_TYPE[d.type]}{d.pages ? `, ${d.pages} pages` : ''} · {d.passages} passages</span>
               </div>
             ))}
-            {r.note && <div className="limits small">{r.note}</div>}
+            {r.note && <div className="tiny muted">{r.note}</div>}
           </div>
         </details>
-      )}
-
-      {r.experiments.length > 0 && (
-        <div className="row small muted">
-          PSI experiments it names:
-          {r.experiments.slice(0, 12).map((e) => (
-            <Link key={e.id} className="cite" to={`/explorer/${e.id}`} title={`Named in ${e.passages} passage(s). Open the experiment profile.`}>
-              {e.short}
-            </Link>
-          ))}
-        </div>
-      )}
-
-      {r.ask.length > 0 && (
-        <div className="row">
-          {r.ask.slice(0, 1).map((q) => (
-            <Explain key={q} q={q} label={q} />
-          ))}
-        </div>
       )}
     </article>
   )
@@ -180,14 +184,11 @@ export default function Resources() {
     if (data && loc.hash) document.getElementById(loc.hash.slice(1))?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }, [data, loc.hash])
 
-  const order = data?.resources.map((r) => r.id) ?? []
   return (
     <div className="page stack">
       <div className="page-head" style={{ marginBottom: 0 }}>
         <h1>NASA Resources</h1>
-        <p>
-          The ten official NASA resources for this challenge, and where the site uses each one.
-        </p>
+        <p>The ten official NASA resources for this challenge, and where the site uses each one.</p>
       </div>
       {loading && <Loading label="Loading the NASA resources" />}
       {error && <ErrorBox message={error} />}
@@ -199,72 +200,43 @@ export default function Resources() {
       )}
       {data && data.resources.length > 0 && (
         <>
-          <section className="grid c4">
-            <div className="stat">
-              <b>
-                {data.totals.read} of {data.totals.resources}
-              </b>
-              <span>official NASA resources used on this site</span>
-            </div>
-            <div className="stat">
-              <b>{data.totals.documents}</b>
-              <span>web pages, PDFs and caption files read besides PSI</span>
-            </div>
-            <div className="stat">
-              <b>{data.totals.passages}</b>
-              <span>passages the AI assistant can search and cite from them</span>
-            </div>
-            <div className="stat">
-              <b>{data.totals.words.toLocaleString()}</b>
-              <span>words of NASA text, each quote checked against it</span>
-            </div>
-          </section>
-          <div className="banner small">
-            {data.note}
-          </div>
+          <p className="small muted">
+            <b style={{ color: 'var(--text)' }}>{data.totals.read} of {data.totals.resources}</b> used ·{' '}
+            {data.totals.documents} documents · {data.totals.passages} passages · {data.totals.words.toLocaleString()} words, every quote checked
+          </p>
+          <UseMatrix list={data.resources} />
 
           {GROUPS.map((g) => {
             const list = data.resources.filter((r) => r.topic === g.topic)
             if (!list.length) return null
             return (
               <section key={g.topic} className="stack">
-                <div>
-                  <h2>{g.title}</h2>
-                  <p className="muted small" style={{ marginTop: 4, maxWidth: '78ch' }}>{g.what}</p>
+                <h2>{g.title}</h2>
+                <div className={list.length > 1 ? 'cards2' : 'stack'}>
+                  {list.map((r) => <ResourceCard key={r.id} r={r} />)}
                 </div>
-                {list.map((r) => (
-                  <ResourceCard key={r.id} r={r} n={order.indexOf(r.id) + 1} />
-                ))}
               </section>
             )
           })}
 
-          <section className="panel warn stack-sm">
-            <h3>What was not read, and why</h3>
-            <ul className="dots small">
-              {data.not_usable.map((p) => (
-                <li key={p.file}>
-                  {data.resources.find((r) => r.id === p.id)?.short}: the full article on NASA’s Technical Reports
-                  Server could not be used ({p.why}). The summary on the Spinoff page is read instead.
-                  {p.url && (
-                    <>
-                      {' '}
-                      <a href={p.url} target="_blank" rel="noreferrer">
-                        NASA file ↗
-                      </a>
-                    </>
-                  )}
-                </li>
-              ))}
-              {data.not_read.map((t) => (
-                <li key={t}>{t}</li>
-              ))}
-            </ul>
-            <p className="tiny faint" style={{ margin: 0 }}>
-              Left out while reading, and counted: {Object.entries(data.left_out).map(([k, n]) => `${n} × ${k}`).join(', ')}.
-              {data.built_at ? ` Read on ${data.built_at.slice(0, 10)}.` : ''}
-            </p>
-          </section>
+          {(data.not_usable.length > 0 || data.not_read.length > 0) && (
+            <details className="src">
+              <summary>
+                <span className="small">What could not be read</span>
+                <span className="tiny faint">▾</span>
+              </summary>
+              <div className="body">
+                <ul className="dots small">
+                  {data.not_usable.map((p) => (
+                    <li key={p.file}>
+                      {data.resources.find((r) => r.id === p.id)?.short}: the full article could not be used ({p.why}); the Spinoff summary is read instead.
+                    </li>
+                  ))}
+                  {data.not_read.map((t) => <li key={t}>{t}</li>)}
+                </ul>
+              </div>
+            </details>
+          )}
         </>
       )}
     </div>

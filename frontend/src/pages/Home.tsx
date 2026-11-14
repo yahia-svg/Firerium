@@ -46,10 +46,19 @@ export default function Home() {
       </section>
 
       <section className="stack">
-        <h2>Start with your role</h2>
+        <div>
+          <h2>Start at your level</h2>
+          <p className="small muted" style={{ marginTop: 6 }}>Four guided paths, from first contact with the topic to expert use.</p>
+        </div>
         <div className="grid c4">
-          {PATHS.map((p) => (
+          {[...PATHS].sort((a, b) => a.level - b.level).map((p) => (
             <div key={p.id} className="panel path">
+              <div className="level" aria-label={`Level ${p.level} of 4: ${p.levelName}`}>
+                <span className="meter" aria-hidden>
+                  {[1, 2, 3, 4].map((i) => <i key={i} className={i <= p.level ? 'on' : ''} />)}
+                </span>
+                <span>Level {p.level} · <b>{p.levelName}</b></span>
+              </div>
               <div>
                 <h4>{p.who}</h4>
                 <h3 style={{ marginTop: 6 }}>{p.title}</h3>

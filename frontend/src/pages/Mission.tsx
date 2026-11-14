@@ -70,7 +70,7 @@ export default function Mission() {
       </div>
 
       <section className="stack-sm">
-        <h4>1 · Choose the crew environment</h4>
+        <h4>Crew environment</h4>
         <div className="env-tabs">
           {meta?.environments.map((e) => (
             <button key={e.id} className={`env-tab ${e.id === env ? 'active' : ''}`} onClick={() => pickEnv(e.id)}>
@@ -83,8 +83,7 @@ export default function Mission() {
 
       <section className="panel tight between">
         <div className="row">
-          <h4>2 · Options</h4>
-          <span className="small muted">Safety focus:</span>
+          <span className="small muted">Focus:</span>
           <button className={`btn sm ${focus === null ? 'on' : ''}`} onClick={() => setFocus(null)}>
             All areas
           </button>
@@ -112,11 +111,9 @@ export default function Mission() {
       {data && (
         <div className="report stack" style={{ opacity: busy ? 0.55 : 1 }}>
           <header className="stack-sm">
-            <span className="tiny faint">
-              PREVIEW · generated {data.generated} from {data.data.investigations} NASA PSI investigations (data collected {String(data.data.built_at).slice(0, 10)})
-            </span>
+            <span className="tiny faint">Preview · {data.generated} · {data.data.investigations} NASA investigations</span>
             <h2 style={{ fontSize: '1.5rem' }}>{data.title}</h2>
-            <div className="limits small">{data.disclaimer}</div>
+            <span className="tiny muted">Research aid built from NASA PSI records; check each statement against its cited source.</span>
             <nav className="row">
               {TOC.map(([id, label]) => (
                 <button key={id} className="btn sm ghost" onClick={() => jump(id)}>
@@ -152,7 +149,8 @@ export default function Mission() {
             <div className="grid c3">
               {([
                 ['What fire safety here requires', data.briefing.safety_needs],
-                ['What the collected research tells us', data.briefing.insights],
+                // the ranking (section 3) already lists who informs what and who scores highest
+                ['What the collected research tells us', data.briefing.insights.filter((t) => !/^(Prevention is informed|Highest-ranked)/.test(t))],
                 ['Research gaps', data.briefing.gaps],
               ] as const).map(([head, items]) => (
                 <div key={head} className="stack-sm">
@@ -227,27 +225,11 @@ export default function Mission() {
                 </div>
               </details>
             ))}
-            {data.lessons && data.lessons.length > 0 && (
-              <details className="src">
-                <summary>
-                  <span className="pill warn">Lessons from past accidents</span>
-                  <span className="small muted">Apollo 1, Apollo 13 and Mir</span>
-                </summary>
-                <div className="body" style={{ fontSize: '0.88rem' }}>
-                  {data.lessons.map((p) => (
-                    <div key={p.title}>
-                      <b style={{ color: 'var(--text)' }}>{p.title}</b> ({p.when}). {p.text}{' '}
-                      <Cited text={p.sources.map((i) => `[${i}]`).join(' ')} />
-                    </div>
-                  ))}
-                </div>
-              </details>
-            )}
           </section>
 
           <section id="m-gaps" className="stack-sm rsec">
             <div className="between">
-              <h3>5. Research gaps for this environment</h3>
+              <h3>5. Research gaps</h3>
               <Link className="small" to={`/gaps?env=${env}`}>Explore the gaps →</Link>
             </div>
             {data.gaps.habitat.rows.map((r) => (
@@ -256,7 +238,7 @@ export default function Mission() {
                 <span className="grow small">
                   <b>{r.label}</b>
                   {r.count === 0 ? (
-                    <span className="cov-none"> · Not represented in this project collection</span>
+                    <span className="cov-none"> · research gap</span>
                   ) : (
                     <span className="muted"> · {r.ids.map((i) => i.short).join(', ')}</span>
                   )}

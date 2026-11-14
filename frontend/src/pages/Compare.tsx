@@ -120,21 +120,22 @@ export default function Compare() {
             </button>
           )}
         </div>
-        {!ready && (
-          <div className="stack-sm">
-            <p className="small muted">Choose at least two experiments, or start from a suggested pair:</p>
-            <div className="chips">
-              {[
-                ['PSI-25', 'PSI-26', 'BASS-II vs BASS (solids in a wind tunnel)'],
-                ['PSI-102', 'PSI-101', 'SAME vs SAME-R (smoke detection)'],
-              ].map(([a, b, label]) => (
-                <button key={label} className="chip" onClick={() => update([a, b])}>
-                  {label}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
+        <div className="row small" style={{ gap: 8 }}>
+          <span className="muted">Suggested pairs:</span>
+          {[
+            ['PSI-25', 'PSI-26', 'BASS-II vs BASS', 'Solids in a flow duct'],
+            ['PSI-25', 'PSI-99', 'BASS-II vs Saffire-II', 'Small vs large samples'],
+            ['PSI-102', 'PSI-101', 'SAME vs SAME-R', 'Smoke detection'],
+            ['PSI-69', 'PSI-68', 'FLEX vs FLEX-2', 'Droplet extinction'],
+          ].map(([a, b, label, why]) => {
+            const on = ids.length === 2 && ids.includes(a) && ids.includes(b)
+            return (
+              <button key={label} className={`chip ${on ? 'on' : ''}`} onClick={() => update([a, b])} title={why}>
+                {label} <span className={on ? '' : 'faint'}>· {why}</span>
+              </button>
+            )
+          })}
+        </div>
       </section>
 
       {ready && loading && <Loading label="Comparing" />}

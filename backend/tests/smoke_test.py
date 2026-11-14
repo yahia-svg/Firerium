@@ -253,7 +253,8 @@ with TestClient(app) as c:
        "experiment profile: BASS shows what NASA's fact sheet says about it")
     ok(c.get("/api/investigations/PSI-142").json()["nasa_resources"] == [],
        "experiment profile: an experiment no resource names shows none")
-    ok({"RES-5", "RES-6", "RES-7"} <= refs and len(mr["lessons"]) == 3, "mission report: accident lessons included and referenced")
+    ok(mr["lessons"] == [] and not ({"RES-6", "RES-7"} & refs),
+       "mission report: research evidence only (accident histories stay on the Lessons page)")
     lib = c.get("/api/assistant/library").json()
     ok(any(k["kind"] == "resource" and k["passages"] == rs["totals"]["passages"] for k in lib["kinds"]),
        "assistant library: the resource passages are searchable")

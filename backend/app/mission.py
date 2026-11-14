@@ -61,10 +61,10 @@ def build(env_id: str, focus: str | None = None, top: int = 6) -> dict:
                        for c in s["cards"]],
         })
 
-    # what three real accidents taught, from NASA's lessons-learned and history pages (official resources)
-    lessons = [{"title": c["title"], "when": c["when"], "where": c["where"], "text": c["text"], "today": c["today"],
-                "limits": c.get("limits"), "evidence": c["evidence"][:1], "url": c["url"],
-                "sources": list(dict.fromkeys(e["source"] for e in c["evidence"]))} for c in ins["lessons"]]
+    # The accident histories (Apollo 1, Apollo 13, Mir) are left out: they are history, not research
+    # evidence for a habitat, and they live on the Lessons & Applications page. The field stays, empty,
+    # so older readers of this API do not break.
+    lessons: list[dict] = []
 
     g = gaps.analyse({}, env_id)
     model = predict.habitat_estimates(environments.ENVIRONMENTS[env_id])
