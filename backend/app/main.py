@@ -5,6 +5,7 @@ Run from the project root:
 """
 from __future__ import annotations
 
+import json
 import logging
 from contextlib import asynccontextmanager
 from pathlib import Path
@@ -34,8 +35,24 @@ def _data_use() -> dict:
     The archive size is the `totalFileSize` NASA publishes in each PSI record. The used size is
     what the build read: the PSI records, the run tables and the representative images."""
     raw = store.ROOT / "data" / "raw"
+    names = ("details", "tables", "images", "docs", "resources")
     parts = {name: sum(f.stat().st_size for f in (raw / name).rglob("*") if f.is_file())
-             for name in ("details", "tables", "images", "docs", "resources") if (raw / name).exists()}
+             for name in names if (raw / name).exists()}
+    # The large downloads (records, documents, resource pages) are not in the repository, so a
+    # deployed server does not have them. Where they exist the sizes are saved; elsewhere the
+    # saved sizes are used, so the figures are the same on every machine.
+    saved_path = store.ROOT / "data" / "raw_sizes.json"
+    if len(parts) == len(names):
+        try:
+            if not saved_path.exists() or json.loads(saved_path.read_text()) != parts:
+                saved_path.write_text(json.dumps(parts, indent=2) + "\n")
+        except OSError:
+            pass
+    elif saved_path.exists():
+        try:
+            parts = {**json.loads(saved_path.read_text()), **parts}
+        except (OSError, ValueError):
+            pass
     return {
         "archive_bytes": round(sum((i.get("archive_gb") or 0) for i in store.INVS.values()) * 1e9),
         "largest": [{"id": i["id"], "short": i["short"], "gb": i["archive_gb"]} for i in
